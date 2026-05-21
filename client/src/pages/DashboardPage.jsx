@@ -6,8 +6,13 @@ import ListView from "../components/ListView.jsx";
 import Metrics from "../components/Metrics.jsx";
 import PublishedStats from "../components/PublishedStats.jsx";
 import ViewToggle from "../components/ViewToggle.jsx";
-import { createIdea, getIdeas, updateIdea } from "../services/contentApi.js";
+import { createIdea, deleteIdea, getIdeas, updateIdea } from "../services/contentApi.js";
 import { getContentMetrics, getPublishedStats } from "../utils/content.js";
+
+function getCurrentMonthStart() {
+  const today = new Date();
+  return new Date(today.getFullYear(), today.getMonth(), 1);
+}
 
 export default function DashboardPage() {
   const [ideas, setIdeas] = useState([]);
@@ -15,7 +20,7 @@ export default function DashboardPage() {
   const [isModalOpen, setModalOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
   const [editingIdea, setEditingIdea] = useState(null);
-  const [currentMonth, setCurrentMonth] = useState(new Date(2026, 4, 1));
+  const [currentMonth, setCurrentMonth] = useState(() => getCurrentMonthStart());
 
   useEffect(() => {
     getIdeas()
@@ -35,6 +40,12 @@ export default function DashboardPage() {
   async function handleUpdateIdea(id, payload) {
     const updatedIdea = await updateIdea(id, payload);
     setIdeas((currentIdeas) => currentIdeas.map((idea) => (idea.id === updatedIdea.id ? updatedIdea : idea)));
+    closeContentModal();
+  }
+
+  async function handleDeleteIdea(id) {
+    await deleteIdea(id);
+    setIdeas((currentIdeas) => currentIdeas.filter((idea) => idea.id !== id));
     closeContentModal();
   }
 
@@ -73,7 +84,7 @@ export default function DashboardPage() {
             currentMonth={currentMonth}
             onPrevious={() => shiftMonth(-1)}
             onNext={() => shiftMonth(1)}
-            onToday={() => setCurrentMonth(new Date(2026, 4, 1))}
+            onToday={() => setCurrentMonth(getCurrentMonthStart())}
             onSelectDate={openContentModal}
             onEditIdea={openEditModal}
           />
@@ -88,6 +99,7 @@ export default function DashboardPage() {
           onClose={closeContentModal}
           onCreate={handleCreateIdea}
           onUpdate={handleUpdateIdea}
+          onDelete={handleDeleteIdea}
           selectedDate={selectedDate}
         />
       )}

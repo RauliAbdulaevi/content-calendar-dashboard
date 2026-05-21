@@ -1,5 +1,5 @@
 ﻿import { useState } from "react";
-import { Image as ImageIcon, Send } from "lucide-react";
+import { Image as ImageIcon, Send, Trash2 } from "lucide-react";
 import { contentTypes, defaultContentForm, platforms, statuses } from "../constants/content.js";
 import { buildContentPayload } from "../utils/content.js";
 import SelectField from "./SelectField.jsx";
@@ -29,7 +29,7 @@ function getInitialForm(idea, selectedDate) {
   };
 }
 
-export default function ContentModal({ idea, onClose, onCreate, onUpdate, selectedDate }) {
+export default function ContentModal({ idea, onClose, onCreate, onUpdate, onDelete, selectedDate }) {
   const isEditing = Boolean(idea);
   const [form, setForm] = useState(() => getInitialForm(idea, selectedDate));
   const [error, setError] = useState("");
@@ -52,6 +52,28 @@ export default function ContentModal({ idea, onClose, onCreate, onUpdate, select
       setForm((currentForm) => ({ ...currentForm, imageUrl: String(reader.result || "") }));
     };
     reader.readAsDataURL(file);
+  }
+
+  async function handleDelete() {
+    if (!isEditing) {
+      return;
+    }
+
+    const confirmed = window.confirm("Delete this content idea? This cannot be undone.");
+
+    if (!confirmed) {
+      return;
+    }
+
+    setError("");
+    setSaving(true);
+    try {
+      await onDelete(idea.id);
+    } catch (deleteError) {
+      setError(deleteError.message);
+    } finally {
+      setSaving(false);
+    }
   }
 
   async function handleSubmit(event) {
@@ -164,6 +186,12 @@ export default function ContentModal({ idea, onClose, onCreate, onUpdate, select
         {error && <p className="form-error">{error}</p>}
 
         <footer className="modal-actions">
+          {isEditing && (
+            <button type="button" className="danger-button" onClick={handleDelete} disabled={isSaving}>
+              <Trash2 size={12} />
+              Delete
+            </button>
+          )}
           <button type="button" className="secondary-button" onClick={onClose}>
             Cancel
           </button>

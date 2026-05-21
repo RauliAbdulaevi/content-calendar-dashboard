@@ -1,6 +1,6 @@
 ﻿import { ChevronLeft, ChevronRight, Image as ImageIcon } from "lucide-react";
 import { groupIdeasByDate } from "../utils/content.js";
-import { buildCalendarCells, formatReadableDate } from "../utils/date.js";
+import { buildCalendarCells, formatReadableDate, toIsoDate } from "../utils/date.js";
 
 export default function CalendarView({ ideas, currentMonth, onPrevious, onNext, onToday, onSelectDate, onEditIdea }) {
   const year = currentMonth.getFullYear();
@@ -8,6 +8,7 @@ export default function CalendarView({ ideas, currentMonth, onPrevious, onNext, 
   const monthName = currentMonth.toLocaleString("en-US", { month: "long", year: "numeric" });
   const cells = buildCalendarCells(year, month);
   const ideasByDate = groupIdeasByDate(ideas);
+  const todayIso = toIsoDate(new Date());
 
   return (
     <section className="calendar-section">
@@ -33,7 +34,7 @@ export default function CalendarView({ ideas, currentMonth, onPrevious, onNext, 
       <div className="calendar-grid">
         {cells.map((cell, index) => {
           const dayIdeas = cell.date ? ideasByDate[cell.iso] || [] : [];
-          const isToday = cell.iso === "2026-05-20";
+          const isToday = cell.iso === todayIso;
 
           return (
             <article
