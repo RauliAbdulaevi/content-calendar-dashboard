@@ -1,9 +1,17 @@
-﻿import { Edit3, Image as ImageIcon } from "lucide-react";
+import { Edit3, Image as ImageIcon, Trash2 } from "lucide-react";
 import { formatReadableDate, formatTime } from "../utils/date.js";
 
-export default function ListView({ ideas, onEditIdea }) {
+export default function ListView({ ideas, onDeleteIdea, onEditIdea }) {
   if (!ideas.length) {
     return <p className="empty-state">No content ideas yet.</p>;
+  }
+
+  function handleDelete(idea) {
+    const confirmed = window.confirm(`Delete "${idea.title}"? This cannot be undone.`);
+
+    if (confirmed) {
+      onDeleteIdea(idea.id);
+    }
   }
 
   return (
@@ -29,10 +37,16 @@ export default function ListView({ ideas, onEditIdea }) {
             )}
           </div>
           <span className={`status-badge ${idea.status.toLowerCase()}`}>{idea.status}</span>
-          <button className="edit-button" onClick={() => onEditIdea(idea)} type="button">
-            <Edit3 size={13} />
-            Edit
-          </button>
+          <div className="idea-actions">
+            <button className="edit-button" onClick={() => onEditIdea(idea)} type="button">
+              <Edit3 size={13} />
+              Edit
+            </button>
+            <button className="danger-button row-delete-button" onClick={() => handleDelete(idea)} type="button">
+              <Trash2 size={13} />
+              Delete
+            </button>
+          </div>
         </article>
       ))}
     </section>

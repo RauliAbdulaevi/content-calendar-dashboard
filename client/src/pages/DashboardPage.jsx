@@ -89,7 +89,7 @@ export default function DashboardPage() {
             onEditIdea={openEditModal}
           />
         ) : (
-          <ListView ideas={ideas} onEditIdea={openEditModal} />
+          <ListView ideas={ideas} onDeleteIdea={handleDeleteIdea} onEditIdea={openEditModal} />
         )}
       </section>
 
