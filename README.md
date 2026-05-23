@@ -15,6 +15,10 @@ Full-stack social media content calendar built with React, Vite, Express.js, JWT
 - Track basic published stats: impressions, likes, comments, and shares
 - Toggle between calendar and list views
 - Admin panel for user role changes, user deletion, and all-content visibility
+- Admin overview metrics and recent activity log
+- API test coverage for auth, admin access, and content idea permissions
+- Environment-based frontend API and backend CORS configuration
+- Auto-restarting development server for backend changes
 
 ## Demo Accounts
 
@@ -114,8 +118,39 @@ npm.cmd run dev
 Frontend: http://127.0.0.1:5173
 Backend: http://localhost:5000
 
+Copy `.env.example` to `.env` before changing local ports, secrets, request limits, or the frontend API URL.
+
 ## Build
 
 ```powershell
 npm.cmd run build
 ```
+
+## Quality Checks
+
+```powershell
+npm.cmd test
+npm.cmd run lint
+npm.cmd run format
+```
+
+The API tests temporarily exercise the local JSON store and restore the original file after the run.
+
+## Environment Variables
+
+```text
+PORT=5000
+JWT_SECRET=replace-with-a-long-random-secret
+JWT_EXPIRES_IN=7d
+JSON_LIMIT=10mb
+CLIENT_ORIGIN=
+VITE_API_URL=http://localhost:5000/api
+```
+
+## Deployment Notes
+
+- Set a strong `JWT_SECRET` in production.
+- Set `CLIENT_ORIGIN` to the deployed frontend origin. Leave it blank for local development, or use commas for multiple allowed origins.
+- Set `VITE_API_URL` to the deployed backend `/api` URL before building the frontend.
+- Run `npm.cmd run build` to create the production frontend bundle in `dist/`.
+- The current storage layer is intentionally the local JSON file used for this project demo.

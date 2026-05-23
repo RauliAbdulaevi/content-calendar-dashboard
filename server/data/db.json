@@ -1,7 +1,7 @@
 {
-  "nextUserId": 4,
+  "nextUserId": 5,
   "nextIdeaId": 4,
-  "nextActivityId": 1,
+  "nextActivityId": 7,
   "users": [
     {
       "id": 1,
@@ -18,17 +18,93 @@
       "passwordHash": "$2b$10$rcOIEfPjs3LBI6.ArJYaE.6Lvr2iXDZ8I2syCzhA.cI.gIFoLf8mO",
       "role": "user",
       "createdAt": "2026-05-22T22:47:00.698Z"
+    }
+  ],
+  "activityLogs": [
+    {
+      "id": 6,
+      "userId": 1,
+      "userEmail": "admin@example.com",
+      "action": "user.deleted",
+      "message": "Deleted 123@gmail.com",
+      "createdAt": "2026-05-23T16:03:43.744Z",
+      "metadata": {
+        "deletedUser": {
+          "id": 4,
+          "name": "123",
+          "email": "123@gmail.com",
+          "passwordHash": "$2b$10$uuOH2lTEsqpXd5dCIq2lF.REohQ6SR/stkbs9WE.dV2zYbL15CG2O",
+          "role": "user",
+          "createdAt": "2026-05-23T16:03:11.299Z"
+        },
+        "deletedIdeas": []
+      }
+    },
+    {
+      "id": 5,
+      "userId": 1,
+      "userEmail": "admin@example.com",
+      "action": "user.recovered",
+      "message": "Recovered 123@gmail.com",
+      "createdAt": "2026-05-23T16:03:37.324Z"
+    },
+    {
+      "id": 4,
+      "userId": 1,
+      "userEmail": "admin@example.com",
+      "action": "user.deleted",
+      "message": "Deleted 123@gmail.com",
+      "createdAt": "2026-05-23T16:03:34.017Z",
+      "metadata": {
+        "deletedUser": {
+          "id": 4,
+          "name": "123",
+          "email": "123@gmail.com",
+          "passwordHash": "$2b$10$uuOH2lTEsqpXd5dCIq2lF.REohQ6SR/stkbs9WE.dV2zYbL15CG2O",
+          "role": "user",
+          "createdAt": "2026-05-23T16:03:11.299Z"
+        },
+        "deletedIdeas": []
+      },
+      "recoveredAt": "2026-05-23T16:03:37.324Z",
+      "recoveredBy": 1
     },
     {
       "id": 3,
-      "name": "123",
-      "email": "123@gmail.com",
-      "passwordHash": "$2b$10$6AiYdXShMzGdPttj93tqTedtVfJn2MGQ0NiYk6ZTEvWHb4.n14kn6",
-      "role": "user",
-      "createdAt": "2026-05-23T14:57:21.129Z"
+      "userId": 1,
+      "userEmail": "admin@example.com",
+      "action": "user.login",
+      "message": "Signed in admin@example.com",
+      "createdAt": "2026-05-23T16:03:29.252Z"
+    },
+    {
+      "id": 2,
+      "userId": 4,
+      "userEmail": "123@gmail.com",
+      "action": "user.registered",
+      "message": "Registered 123@gmail.com",
+      "createdAt": "2026-05-23T16:03:11.300Z"
+    },
+    {
+      "id": 1,
+      "userId": 1,
+      "userEmail": "admin@example.com",
+      "action": "user.deleted",
+      "message": "Deleted 123@gmail.com",
+      "createdAt": "2026-05-23T15:34:02.229Z",
+      "metadata": {
+        "deletedUser": {
+          "id": 3,
+          "name": "123",
+          "email": "123@gmail.com",
+          "passwordHash": "$2b$10$6AiYdXShMzGdPttj93tqTedtVfJn2MGQ0NiYk6ZTEvWHb4.n14kn6",
+          "role": "user",
+          "createdAt": "2026-05-23T14:57:21.129Z"
+        },
+        "deletedIdeas": []
+      }
     }
   ],
-  "activityLogs": [],
   "ideas": [
     {
       "id": 1,

@@ -4,11 +4,15 @@
     "private": true,
     "type": "module",
     "scripts": {
-        "dev": "concurrently \"npm run server\" \"npm run client\"",
+        "dev": "concurrently \"npm run server:dev\" \"npm run client\"",
         "server": "node server/index.js",
+        "server:dev": "nodemon server/index.js",
         "client": "vite --config client/vite.config.js --host 127.0.0.1 --port 5173",
         "build": "vite build --config client/vite.config.js",
-        "preview": "vite preview --config client/vite.config.js --host 127.0.0.1 --port 4173"
+        "preview": "vite preview --config client/vite.config.js --host 127.0.0.1 --port 4173",
+        "test": "node --test",
+        "lint": "eslint .",
+        "format": "prettier --write ."
     },
     "dependencies": {
         "@vitejs/plugin-react": "^5.0.0",
@@ -22,5 +26,12 @@
         "react-dom": "^19.0.0",
         "react-router-dom": "^7.15.1",
         "vite": "^6.0.0"
+    },
+    "devDependencies": {
+        "@eslint/js": "^10.0.1",
+        "eslint": "^10.4.0",
+        "globals": "^17.6.0",
+        "nodemon": "^3.1.14",
+        "prettier": "^3.8.3"
     }
 }

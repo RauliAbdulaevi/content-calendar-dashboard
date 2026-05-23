@@ -11,7 +11,17 @@ initializeStore();
 
 const app = express();
 
-app.use(cors());
+app.use(
+  cors({
+    origin(origin, callback) {
+      if (!origin || !env.clientOrigins.length || env.clientOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      return callback(new Error("Not allowed by CORS"));
+    }
+  })
+);
 app.use(express.json({ limit: env.jsonLimit }));
 
 app.get("/api/health", (_req, res) => {

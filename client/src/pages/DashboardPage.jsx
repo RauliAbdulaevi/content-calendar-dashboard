@@ -7,6 +7,7 @@ import Header from "../components/Header.jsx";
 import ListView from "../components/ListView.jsx";
 import Metrics from "../components/Metrics.jsx";
 import PublishedStats from "../components/PublishedStats.jsx";
+import { ErrorState } from "../components/RequestState.jsx";
 import ViewToggle from "../components/ViewToggle.jsx";
 import { createIdea, deleteIdea, getIdeas, updateIdea } from "../services/contentApi.js";
 import { useAuth } from "../context/AuthContext.jsx";
@@ -29,17 +30,28 @@ export default function DashboardPage() {
   const [error, setError] = useState("");
   const [filters, setFilters] = useState({ search: "", status: "All", platform: "All", contentType: "All" });
 
-  useEffect(() => {
-    getIdeas()
-      .then(setIdeas)
-      .catch((loadError) => setError(loadError.message))
-      .finally(() => setLoading(false));
-  }, []);
-
   const filteredIdeas = useMemo(() => filterIdeas(ideas, filters), [ideas, filters]);
   const metrics = useMemo(() => getContentMetrics(ideas), [ideas]);
   const publishedStats = useMemo(() => getPublishedStats(ideas), [ideas]);
   const analytics = useMemo(() => getAnalyticsSummary(ideas), [ideas]);
+
+  async function loadIdeas() {
+    setLoading(true);
+    setError("");
+
+    try {
+      const ideasData = await getIdeas();
+      setIdeas(ideasData);
+    } catch (loadError) {
+      setError(loadError.message);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    loadIdeas();
+  }, []);
 
   async function handleCreateIdea(payload) {
     setError("");
@@ -112,10 +124,10 @@ export default function DashboardPage() {
           <p>{ideas.length ? `${filteredIdeas.length} of ${ideas.length} ideas shown` : "Your workspace is ready"}</p>
         </div>
         <FilterBar filters={filters} onChange={setFilters} resultCount={filteredIdeas.length} />
-        {error && <p className="notice error">{error}</p>}
+        {error && !isLoading && <ErrorState message={error} onRetry={loadIdeas} />}
         {isLoading ? (
           <section className="surface-state">Loading your content calendar...</section>
-        ) : view === "calendar" ? (
+        ) : error ? null : view === "calendar" ? (
           <CalendarView
             ideas={filteredIdeas}
             currentMonth={currentMonth}

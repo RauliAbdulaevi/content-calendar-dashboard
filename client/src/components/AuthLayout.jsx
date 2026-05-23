@@ -1,14 +1,29 @@
-﻿import { Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 
-export default function AuthLayout({ title, subtitle, children, footerText, footerLink, footerLinkText }) {
+const visualContent = {
+  login: {
+    chip: "Campaign planning",
+    value: "28 posts",
+    detail: "scheduled across five channels"
+  },
+  register: {
+    chip: "New workspace",
+    value: "Launch",
+    detail: "your first content calendar"
+  }
+};
+
+export default function AuthLayout({ title, subtitle, children, footerText, footerLink, footerLinkText, variant = "login" }) {
+  const visual = visualContent[variant] || visualContent.login;
+
   return (
     <main className="auth-page">
       <section className="auth-shell">
-        <div className="auth-visual" aria-hidden="true">
+        <div className={`auth-visual ${variant}`} aria-hidden="true">
           <div className="auth-photo-card">
-            <span className="photo-chip">Campaign planning</span>
-            <strong>28 posts</strong>
-            <p>scheduled across five channels</p>
+            <span className="photo-chip">{visual.chip}</span>
+            <strong>{visual.value}</strong>
+            <p>{visual.detail}</p>
           </div>
           <div className="auth-visual-card">
             <span />

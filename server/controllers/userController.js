@@ -1,5 +1,5 @@
 import { listActivityLogs } from "../services/activityService.js";
-import { deleteUser, listUsers, updateRole } from "../services/userService.js";
+import { deleteUser, listUsers, recoverDeletedUser, updateRole } from "../services/userService.js";
 
 export function getUsers(_req, res) {
   res.json(listUsers());
@@ -17,4 +17,9 @@ export function removeUser(req, res) {
 
 export function getActivity(_req, res) {
   res.json(listActivityLogs());
+}
+
+export function recoverUser(req, res) {
+  const user = recoverDeletedUser(req.user, Number(req.params.activityId));
+  res.json(user);
 }

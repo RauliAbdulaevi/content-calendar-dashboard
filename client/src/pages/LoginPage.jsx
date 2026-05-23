@@ -1,5 +1,5 @@
 ﻿import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import AuthLayout from "../components/AuthLayout.jsx";
 import { useAuth } from "../context/AuthContext.jsx";
 
@@ -37,6 +37,7 @@ export default function LoginPage() {
       footerText="Do not have an account?"
       footerLink="/register"
       footerLinkText="Create one"
+      variant="login"
     >
       <form className="auth-form" onSubmit={handleSubmit}>
         <label>

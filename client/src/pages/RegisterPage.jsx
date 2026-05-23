@@ -42,6 +42,7 @@ export default function RegisterPage() {
       footerText="Already have an account?"
       footerLink="/login"
       footerLinkText="Log in"
+      variant="register"
     >
       <form className="auth-form" onSubmit={handleSubmit}>
         <label>

@@ -60,6 +60,9 @@ export async function loginUser({ email, password }) {
     throw new AppError("Invalid email or password.", 401);
   }
 
+  recordActivity(data, user, "user.login", `Signed in ${user.email}`);
+  writeData(data);
+
   return { token: signToken(user), user: publicUser(user) };
 }
 

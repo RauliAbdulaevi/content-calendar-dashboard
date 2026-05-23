@@ -18,3 +18,7 @@ export function updateUserRole(id, role) {
 export function deleteUser(id) {
   return authRequest(`/users/${id}`, { method: "DELETE" });
 }
+
+export function recoverUserFromActivity(activityId) {
+  return authRequest(`/users/activity/${activityId}/recover`, { method: "PATCH" });
+}
