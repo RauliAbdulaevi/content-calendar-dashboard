@@ -1,4 +1,5 @@
 import { Edit3, Image as ImageIcon, Trash2 } from "lucide-react";
+import { getStatusClass } from "../utils/content.js";
 import { formatReadableDate, formatTime } from "../utils/date.js";
 
 function getPlatformClass(platform = "") {
@@ -46,7 +47,7 @@ export default function ListView({ ideas, onDeleteIdea, onEditIdea }) {
               </p>
             )}
           </div>
-          <span className={`status-badge ${idea.status.toLowerCase()}`}>{idea.status}</span>
+          <span className={`status-badge ${getStatusClass(idea.status)}`}>{idea.status}</span>
           <div className="idea-actions">
             <button className="edit-button" onClick={() => onEditIdea(idea)} type="button">
               <Edit3 size={13} />

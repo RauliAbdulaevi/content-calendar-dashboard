@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import { env } from "../config/env.js";
 import { readData, writeData, publicUser } from "../models/store.js";
 import { AppError } from "../utils/AppError.js";
+import { recordActivity } from "./activityService.js";
 
 export function signToken(user) {
   return jwt.sign({ id: user.id, email: user.email, role: user.role }, env.jwtSecret, { expiresIn: env.jwtExpiresIn });
@@ -40,6 +41,7 @@ export async function registerUser({ name, email, password }) {
   };
 
   data.users.push(user);
+  recordActivity(data, user, "user.registered", `Registered ${user.email}`);
   writeData(data);
 
   return { token: signToken(user), user: publicUser(user) };

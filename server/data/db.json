@@ -1,6 +1,7 @@
 {
   "nextUserId": 4,
-  "nextIdeaId": 5,
+  "nextIdeaId": 4,
+  "nextActivityId": 1,
   "users": [
     {
       "id": 1,
@@ -27,6 +28,7 @@
       "createdAt": "2026-05-23T14:57:21.129Z"
     }
   ],
+  "activityLogs": [],
   "ideas": [
     {
       "id": 1,

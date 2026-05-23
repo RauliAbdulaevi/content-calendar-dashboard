@@ -1,8 +1,8 @@
 ﻿import { ChevronLeft, ChevronRight, Image as ImageIcon } from "lucide-react";
-import { groupIdeasByDate } from "../utils/content.js";
+import { getStatusClass, groupIdeasByDate } from "../utils/content.js";
 import { buildCalendarCells, formatReadableDate, toIsoDate } from "../utils/date.js";
 
-export default function CalendarView({ ideas, currentMonth, onPrevious, onNext, onToday, onSelectDate, onEditIdea }) {
+export default function CalendarView({ ideas, currentMonth, onPrevious, onNext, onToday, onSelectDate, onEditIdea, onMoveIdea }) {
   const year = currentMonth.getFullYear();
   const month = currentMonth.getMonth();
   const monthName = currentMonth.toLocaleString("en-US", { month: "long", year: "numeric" });
@@ -44,6 +44,18 @@ export default function CalendarView({ ideas, currentMonth, onPrevious, onNext, 
               tabIndex={cell.inMonth ? 0 : undefined}
               aria-label={cell.inMonth ? `Create content for ${formatReadableDate(cell.iso)}` : undefined}
               onClick={cell.inMonth ? () => onSelectDate(cell.iso) : undefined}
+              onDragOver={cell.inMonth ? (event) => event.preventDefault() : undefined}
+              onDrop={
+                cell.inMonth
+                  ? (event) => {
+                      event.preventDefault();
+                      const ideaId = Number(event.dataTransfer.getData("text/plain"));
+                      if (ideaId) {
+                        onMoveIdea(ideaId, cell.iso);
+                      }
+                    }
+                  : undefined
+              }
               onKeyDown={
                 cell.inMonth
                   ? (event) => {
@@ -59,8 +71,13 @@ export default function CalendarView({ ideas, currentMonth, onPrevious, onNext, 
               <div className="cell-events">
                 {dayIdeas.slice(0, 3).map((idea) => (
                   <button
-                    className={`event-pill ${idea.status.toLowerCase()}`}
+                    className={`event-pill ${getStatusClass(idea.status)}`}
+                    draggable
                     key={idea.id}
+                    onDragStart={(event) => {
+                      event.stopPropagation();
+                      event.dataTransfer.setData("text/plain", String(idea.id));
+                    }}
                     onClick={(event) => {
                       event.stopPropagation();
                       onEditIdea(idea);

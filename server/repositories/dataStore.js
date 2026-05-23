@@ -73,13 +73,33 @@ function createSeedData() {
         createdAt: new Date().toISOString()
       }
     ],
-    ideas: seedIdeas
+    ideas: seedIdeas,
+    nextActivityId: 1,
+    activityLogs: []
   };
 }
 
 function ensureStore() {
   if (!fs.existsSync(dataPath)) {
     saveData(createSeedData());
+    return;
+  }
+
+  const data = JSON.parse(fs.readFileSync(dataPath, "utf8"));
+  let changed = false;
+
+  if (!Array.isArray(data.activityLogs)) {
+    data.activityLogs = [];
+    changed = true;
+  }
+
+  if (!data.nextActivityId) {
+    data.nextActivityId = 1;
+    changed = true;
+  }
+
+  if (changed) {
+    saveData(data);
   }
 }
 

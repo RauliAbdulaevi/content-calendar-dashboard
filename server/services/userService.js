@@ -1,12 +1,13 @@
-﻿import { isValidRole } from "../models/User.js";
+import { isValidRole } from "../models/User.js";
 import { mutateData, publicUser, readData } from "../models/store.js";
 import { AppError } from "../utils/AppError.js";
+import { recordActivity } from "./activityService.js";
 
 export function listUsers() {
   return readData().users.map(publicUser);
 }
 
-export function updateRole(id, role) {
+export function updateRole(adminUser, id, role) {
   if (!isValidRole(role)) {
     throw new AppError("Role must be admin or user.", 400);
   }
@@ -19,6 +20,7 @@ export function updateRole(id, role) {
     }
 
     user.role = role;
+    recordActivity(data, adminUser, "user.role", `Changed ${user.email} to ${role}`);
     return publicUser(user);
   });
 }
@@ -29,13 +31,14 @@ export function deleteUser(adminUser, id) {
   }
 
   mutateData((data) => {
-    const exists = data.users.some((user) => user.id === id);
+    const deletedUser = data.users.find((user) => user.id === id);
 
-    if (!exists) {
+    if (!deletedUser) {
       throw new AppError("User not found.", 404);
     }
 
     data.users = data.users.filter((user) => user.id !== id);
     data.ideas = data.ideas.filter((idea) => idea.userId !== id);
+    recordActivity(data, adminUser, "user.deleted", `Deleted ${deletedUser.email}`);
   });
 }

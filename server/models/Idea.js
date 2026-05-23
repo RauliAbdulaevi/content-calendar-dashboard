@@ -1,4 +1,4 @@
-export const statuses = ["Draft", "Scheduled", "Published"];
+export const statuses = ["Idea", "Draft", "In Review", "Approved", "Scheduled", "Published"];
 
 export function normalizeStats(stats = {}) {
   return {

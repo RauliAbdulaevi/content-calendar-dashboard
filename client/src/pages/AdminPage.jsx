@@ -3,21 +3,24 @@ import { Link } from "react-router-dom";
 import RoleBadge from "../components/RoleBadge.jsx";
 import { useAuth } from "../context/AuthContext.jsx";
 import { deleteIdea, getIdeas } from "../services/contentApi.js";
-import { deleteUser, getUsers, updateUserRole } from "../services/userApi.js";
+import { deleteUser, getActivityLogs, getUsers, updateUserRole } from "../services/userApi.js";
+import { getStatusClass } from "../utils/content.js";
 import { formatReadableDate, formatTime } from "../utils/date.js";
 
 export default function AdminPage() {
   const { user, logout } = useAuth();
   const [users, setUsers] = useState([]);
   const [ideas, setIdeas] = useState([]);
+  const [activityLogs, setActivityLogs] = useState([]);
   const [error, setError] = useState("");
   const [isLoading, setLoading] = useState(true);
 
   async function loadAdminData() {
     try {
-      const [usersData, ideasData] = await Promise.all([getUsers(), getIdeas()]);
+      const [usersData, ideasData, activityData] = await Promise.all([getUsers(), getIdeas(), getActivityLogs()]);
       setUsers(usersData);
       setIdeas(ideasData);
+      setActivityLogs(activityData);
     } catch (loadError) {
       setError(loadError.message);
     } finally {
@@ -41,6 +44,8 @@ export default function AdminPage() {
     try {
       const updated = await updateUserRole(id, role);
       setUsers((current) => current.map((item) => (item.id === updated.id ? updated : item)));
+      const activityData = await getActivityLogs();
+      setActivityLogs(activityData);
     } catch (roleError) {
       setError(roleError.message);
     }
@@ -58,6 +63,8 @@ export default function AdminPage() {
       await deleteUser(targetUser.id);
       setUsers((current) => current.filter((item) => item.id !== targetUser.id));
       setIdeas((current) => current.filter((idea) => idea.userId !== targetUser.id));
+      const activityData = await getActivityLogs();
+      setActivityLogs(activityData);
     } catch (deleteError) {
       setError(deleteError.message);
     }
@@ -74,6 +81,8 @@ export default function AdminPage() {
     try {
       await deleteIdea(idea.id);
       setIdeas((current) => current.filter((item) => item.id !== idea.id));
+      const activityData = await getActivityLogs();
+      setActivityLogs(activityData);
     } catch (deleteError) {
       setError(deleteError.message);
     }
@@ -179,7 +188,7 @@ export default function AdminPage() {
                   <tr key={idea.id}>
                     <td>{idea.title}</td>
                     <td>{usersById[idea.userId]?.email || "Unknown"}</td>
-                    <td><span className={`status-badge ${idea.status.toLowerCase()}`}>{idea.status}</span></td>
+                    <td><span className={`status-badge ${getStatusClass(idea.status)}`}>{idea.status}</span></td>
                     <td>{formatReadableDate(idea.scheduledDate)} at {formatTime(idea.scheduledTime)}</td>
                     <td>{idea.platform}</td>
                     <td>
@@ -191,6 +200,24 @@ export default function AdminPage() {
                 ))}
               </tbody>
             </table>
+          </div>
+        </section>
+
+        <section className="admin-section">
+          <div className="section-heading">
+            <h2>Activity Log</h2>
+            <span>{activityLogs.length} recent actions</span>
+          </div>
+          <div className="activity-list">
+            {isLoading && <p>Loading activity...</p>}
+            {!isLoading && !activityLogs.length && <p>No activity has been recorded yet.</p>}
+            {!isLoading && activityLogs.slice(0, 8).map((log) => (
+              <article className="activity-item" key={log.id}>
+                <span>{log.action.replace(".", " ")}</span>
+                <strong>{log.message}</strong>
+                <p>{log.userEmail} - {formatReadableDate(log.createdAt.slice(0, 10))}</p>
+              </article>
+            ))}
           </div>
         </section>
       </section>

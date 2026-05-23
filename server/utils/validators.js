@@ -61,7 +61,7 @@ export function validateIdeaPayload(payload) {
   }
 
   if (!statuses.includes(status)) {
-    throw new AppError("Status must be Draft, Scheduled, or Published.", 400);
+    throw new AppError("Status must be Idea, Draft, In Review, Approved, Scheduled, or Published.", 400);
   }
 
   return {

@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import CalendarView from "../components/CalendarView.jsx";
+import AnalyticsPanel from "../components/AnalyticsPanel.jsx";
 import ContentModal from "../components/ContentModal.jsx";
+import FilterBar from "../components/FilterBar.jsx";
 import Header from "../components/Header.jsx";
 import ListView from "../components/ListView.jsx";
 import Metrics from "../components/Metrics.jsx";
@@ -8,7 +10,7 @@ import PublishedStats from "../components/PublishedStats.jsx";
 import ViewToggle from "../components/ViewToggle.jsx";
 import { createIdea, deleteIdea, getIdeas, updateIdea } from "../services/contentApi.js";
 import { useAuth } from "../context/AuthContext.jsx";
-import { getContentMetrics, getPublishedStats } from "../utils/content.js";
+import { filterIdeas, getAnalyticsSummary, getContentMetrics, getPublishedStats } from "../utils/content.js";
 
 function getCurrentMonthStart() {
   const today = new Date();
@@ -25,6 +27,7 @@ export default function DashboardPage() {
   const [currentMonth, setCurrentMonth] = useState(() => getCurrentMonthStart());
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [filters, setFilters] = useState({ search: "", status: "All", platform: "All", contentType: "All" });
 
   useEffect(() => {
     getIdeas()
@@ -33,8 +36,10 @@ export default function DashboardPage() {
       .finally(() => setLoading(false));
   }, []);
 
+  const filteredIdeas = useMemo(() => filterIdeas(ideas, filters), [ideas, filters]);
   const metrics = useMemo(() => getContentMetrics(ideas), [ideas]);
   const publishedStats = useMemo(() => getPublishedStats(ideas), [ideas]);
+  const analytics = useMemo(() => getAnalyticsSummary(ideas), [ideas]);
 
   async function handleCreateIdea(payload) {
     setError("");
@@ -55,6 +60,22 @@ export default function DashboardPage() {
     await deleteIdea(id);
     setIdeas((currentIdeas) => currentIdeas.filter((idea) => idea.id !== id));
     closeContentModal();
+  }
+
+  async function handleMoveIdea(id, scheduledDate) {
+    const idea = ideas.find((item) => item.id === id);
+
+    if (!idea || idea.scheduledDate === scheduledDate) {
+      return;
+    }
+
+    setError("");
+    try {
+      const updatedIdea = await updateIdea(id, { ...idea, scheduledDate });
+      setIdeas((currentIdeas) => currentIdeas.map((item) => (item.id === updatedIdea.id ? updatedIdea : item)));
+    } catch (moveError) {
+      setError(moveError.message);
+    }
   }
 
   function shiftMonth(amount) {
@@ -85,25 +106,28 @@ export default function DashboardPage() {
         <Header onNewContent={() => openContentModal()} user={user} isAdmin={isAdmin} onLogout={logout} />
         <Metrics metrics={metrics} />
         <PublishedStats stats={publishedStats} />
+        <AnalyticsPanel analytics={analytics} />
         <div className="workspace-bar">
           <ViewToggle view={view} onChange={setView} />
-          <p>{ideas.length ? `${ideas.length} ideas in your workspace` : "Your workspace is ready"}</p>
+          <p>{ideas.length ? `${filteredIdeas.length} of ${ideas.length} ideas shown` : "Your workspace is ready"}</p>
         </div>
+        <FilterBar filters={filters} onChange={setFilters} resultCount={filteredIdeas.length} />
         {error && <p className="notice error">{error}</p>}
         {isLoading ? (
           <section className="surface-state">Loading your content calendar...</section>
         ) : view === "calendar" ? (
           <CalendarView
-            ideas={ideas}
+            ideas={filteredIdeas}
             currentMonth={currentMonth}
             onPrevious={() => shiftMonth(-1)}
             onNext={() => shiftMonth(1)}
             onToday={() => setCurrentMonth(getCurrentMonthStart())}
             onSelectDate={openContentModal}
             onEditIdea={openEditModal}
+            onMoveIdea={handleMoveIdea}
           />
         ) : (
-          <ListView ideas={ideas} onDeleteIdea={handleDeleteIdea} onEditIdea={openEditModal} />
+          <ListView ideas={filteredIdeas} onDeleteIdea={handleDeleteIdea} onEditIdea={openEditModal} />
         )}
       </section>
 

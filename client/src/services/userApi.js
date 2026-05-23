@@ -4,6 +4,10 @@ export function getUsers() {
   return authRequest("/users");
 }
 
+export function getActivityLogs() {
+  return authRequest("/users/activity");
+}
+
 export function updateUserRole(id, role) {
   return authRequest(`/users/${id}/role`, {
     method: "PATCH",

@@ -1,6 +1,6 @@
 ﻿export const platforms = ["Instagram", "TikTok", "LinkedIn", "Facebook", "YouTube", "X"];
 export const contentTypes = ["Post", "Reel", "Carousel", "Story", "Video", "Newsletter"];
-export const statuses = ["Draft", "Scheduled", "Published"];
+export const statuses = ["Idea", "Draft", "In Review", "Approved", "Scheduled", "Published"];
 
 export const defaultContentForm = {
   title: "",
