@@ -1,9 +1,18 @@
 import { Edit3, Image as ImageIcon, Trash2 } from "lucide-react";
 import { formatReadableDate, formatTime } from "../utils/date.js";
 
+function getPlatformClass(platform = "") {
+  return platform.toLowerCase().replace(/[^a-z0-9]+/g, "-") || "default";
+}
+
 export default function ListView({ ideas, onDeleteIdea, onEditIdea }) {
   if (!ideas.length) {
-    return <p className="empty-state">No content ideas yet.</p>;
+    return (
+      <section className="surface-state">
+        <strong>No content ideas yet</strong>
+        <span>Create your first post idea to start filling the calendar.</span>
+      </section>
+    );
   }
 
   function handleDelete(idea) {
@@ -21,8 +30,9 @@ export default function ListView({ ideas, onDeleteIdea, onEditIdea }) {
           {idea.imageUrl ? (
             <img className="idea-thumb" src={idea.imageUrl} alt="" />
           ) : (
-            <span className="idea-thumb empty">
+            <span className={`idea-thumb empty ${getPlatformClass(idea.platform)}`}>
               <ImageIcon size={16} />
+              <span>{idea.platform?.slice(0, 2) || "SM"}</span>
             </span>
           )}
           <div className="idea-main">

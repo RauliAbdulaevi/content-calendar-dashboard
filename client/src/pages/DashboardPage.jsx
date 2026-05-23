@@ -1,4 +1,4 @@
-﻿import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import CalendarView from "../components/CalendarView.jsx";
 import ContentModal from "../components/ContentModal.jsx";
 import Header from "../components/Header.jsx";
@@ -7,6 +7,7 @@ import Metrics from "../components/Metrics.jsx";
 import PublishedStats from "../components/PublishedStats.jsx";
 import ViewToggle from "../components/ViewToggle.jsx";
 import { createIdea, deleteIdea, getIdeas, updateIdea } from "../services/contentApi.js";
+import { useAuth } from "../context/AuthContext.jsx";
 import { getContentMetrics, getPublishedStats } from "../utils/content.js";
 
 function getCurrentMonthStart() {
@@ -15,35 +16,42 @@ function getCurrentMonthStart() {
 }
 
 export default function DashboardPage() {
+  const { user, isAdmin, logout } = useAuth();
   const [ideas, setIdeas] = useState([]);
   const [view, setView] = useState("calendar");
   const [isModalOpen, setModalOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
   const [editingIdea, setEditingIdea] = useState(null);
   const [currentMonth, setCurrentMonth] = useState(() => getCurrentMonthStart());
+  const [isLoading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     getIdeas()
       .then(setIdeas)
-      .catch(() => setIdeas([]));
+      .catch((loadError) => setError(loadError.message))
+      .finally(() => setLoading(false));
   }, []);
 
   const metrics = useMemo(() => getContentMetrics(ideas), [ideas]);
   const publishedStats = useMemo(() => getPublishedStats(ideas), [ideas]);
 
   async function handleCreateIdea(payload) {
+    setError("");
     const createdIdea = await createIdea(payload);
     setIdeas((currentIdeas) => [...currentIdeas, createdIdea]);
     closeContentModal();
   }
 
   async function handleUpdateIdea(id, payload) {
+    setError("");
     const updatedIdea = await updateIdea(id, payload);
     setIdeas((currentIdeas) => currentIdeas.map((idea) => (idea.id === updatedIdea.id ? updatedIdea : idea)));
     closeContentModal();
   }
 
   async function handleDeleteIdea(id) {
+    setError("");
     await deleteIdea(id);
     setIdeas((currentIdeas) => currentIdeas.filter((idea) => idea.id !== id));
     closeContentModal();
@@ -74,11 +82,17 @@ export default function DashboardPage() {
   return (
     <main className="app-shell">
       <section className="dashboard">
-        <Header onNewContent={() => openContentModal()} />
+        <Header onNewContent={() => openContentModal()} user={user} isAdmin={isAdmin} onLogout={logout} />
         <Metrics metrics={metrics} />
         <PublishedStats stats={publishedStats} />
-        <ViewToggle view={view} onChange={setView} />
-        {view === "calendar" ? (
+        <div className="workspace-bar">
+          <ViewToggle view={view} onChange={setView} />
+          <p>{ideas.length ? `${ideas.length} ideas in your workspace` : "Your workspace is ready"}</p>
+        </div>
+        {error && <p className="notice error">{error}</p>}
+        {isLoading ? (
+          <section className="surface-state">Loading your content calendar...</section>
+        ) : view === "calendar" ? (
           <CalendarView
             ideas={ideas}
             currentMonth={currentMonth}

@@ -1,0 +1,81 @@
+{
+  "nextUserId": 3,
+  "nextIdeaId": 4,
+  "users": [
+    {
+      "id": 1,
+      "name": "Admin User",
+      "email": "admin@example.com",
+      "passwordHash": "$2b$10$00hh2H4AKCYjy6dxBXmWpunuYP9BNOdyI/o48PKEWFDROcCMSmU7q",
+      "role": "admin",
+      "createdAt": "2026-05-22T22:47:00.638Z"
+    },
+    {
+      "id": 2,
+      "name": "Demo User",
+      "email": "user@example.com",
+      "passwordHash": "$2b$10$rcOIEfPjs3LBI6.ArJYaE.6Lvr2iXDZ8I2syCzhA.cI.gIFoLf8mO",
+      "role": "user",
+      "createdAt": "2026-05-22T22:47:00.698Z"
+    }
+  ],
+  "ideas": [
+    {
+      "id": 1,
+      "userId": 1,
+      "title": "Behind the scenes reel",
+      "platform": "Instagram",
+      "contentType": "Reel",
+      "script": "Show the team planning this month's campaign.",
+      "caption": "A little look at what goes into each launch.",
+      "scheduledDate": "2026-05-08",
+      "scheduledTime": "09:30",
+      "imageUrl": "",
+      "status": "Scheduled",
+      "stats": {
+        "impressions": 0,
+        "likes": 0,
+        "comments": 0,
+        "shares": 0
+      }
+    },
+    {
+      "id": 2,
+      "userId": 2,
+      "title": "Newsletter launch teaser",
+      "platform": "LinkedIn",
+      "contentType": "Post",
+      "script": "Announce the newsletter and invite signups.",
+      "caption": "New insights are landing in your inbox soon.",
+      "scheduledDate": "2026-05-13",
+      "scheduledTime": "12:00",
+      "imageUrl": "",
+      "status": "Draft",
+      "stats": {
+        "impressions": 0,
+        "likes": 0,
+        "comments": 0,
+        "shares": 0
+      }
+    },
+    {
+      "id": 3,
+      "userId": 1,
+      "title": "Customer tip carousel",
+      "platform": "Facebook",
+      "contentType": "Carousel",
+      "script": "Three quick content planning tips for small teams.",
+      "caption": "Save this checklist for your next content sprint.",
+      "scheduledDate": "2026-05-20",
+      "scheduledTime": "16:45",
+      "imageUrl": "",
+      "status": "Published",
+      "stats": {
+        "impressions": 1840,
+        "likes": 126,
+        "comments": 18,
+        "shares": 34
+      }
+    }
+  ]
+}

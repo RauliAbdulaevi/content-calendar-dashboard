@@ -1,5 +1,5 @@
 ﻿import { useState } from "react";
-import { Image as ImageIcon, Send, Trash2 } from "lucide-react";
+import { Image as ImageIcon, Send, Trash2, X } from "lucide-react";
 import { contentTypes, defaultContentForm, platforms, statuses } from "../constants/content.js";
 import { buildContentPayload } from "../utils/content.js";
 import SelectField from "./SelectField.jsx";
@@ -107,7 +107,7 @@ export default function ContentModal({ idea, onClose, onCreate, onUpdate, onDele
         <div className="modal-header">
           <h2>{isEditing ? "Edit Content Idea" : "New Content Idea"}</h2>
           <button type="button" className="icon-button" onClick={onClose} aria-label="Close modal">
-            x
+            <X size={16} />
           </button>
         </div>
 

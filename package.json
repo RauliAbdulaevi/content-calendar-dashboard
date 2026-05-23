@@ -1,26 +1,26 @@
 {
-    "name":  "content-calendar-dashboard",
-    "version":  "1.0.0",
-    "private":  true,
-    "type":  "module",
-    "scripts":  {
-                    "dev":  "concurrently \"npm run server\" \"npm run client\"",
-                    "server":  "node server/index.js",
-                    "client":  "vite --config client/vite.config.js --host 127.0.0.1 --port 5173",
-                    "build":  "vite build --config client/vite.config.js",
-                    "preview":  "vite preview --config client/vite.config.js --host 127.0.0.1 --port 4173"
-                },
-    "dependencies":  {
-                         "@vitejs/plugin-react":  "^5.0.0",
-                         "concurrently":  "^9.2.0",
-                         "cors":  "^2.8.5",
-                         "express":  "^5.1.0",
-                         "lucide-react":  "^0.468.0",
-                         "vite":  "^6.0.0",
-                         "react":  "^19.0.0",
-                         "react-dom":  "^19.0.0"
-                     },
-    "devDependencies":  {
-
-                        }
+    "name": "content-calendar-dashboard",
+    "version": "1.0.0",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "dev": "concurrently \"npm run server\" \"npm run client\"",
+        "server": "node server/index.js",
+        "client": "vite --config client/vite.config.js --host 127.0.0.1 --port 5173",
+        "build": "vite build --config client/vite.config.js",
+        "preview": "vite preview --config client/vite.config.js --host 127.0.0.1 --port 4173"
+    },
+    "dependencies": {
+        "@vitejs/plugin-react": "^5.0.0",
+        "bcrypt": "^6.0.0",
+        "concurrently": "^9.2.0",
+        "cors": "^2.8.5",
+        "express": "^5.1.0",
+        "jsonwebtoken": "^9.0.3",
+        "lucide-react": "^0.468.0",
+        "react": "^19.0.0",
+        "react-dom": "^19.0.0",
+        "react-router-dom": "^7.15.1",
+        "vite": "^6.0.0"
+    }
 }
