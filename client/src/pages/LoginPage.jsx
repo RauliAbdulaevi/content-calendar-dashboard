@@ -52,7 +52,6 @@ export default function LoginPage() {
           {isSubmitting ? "Logging in..." : "Login"}
         </button>
       </form>
-      <p className="demo-login-note">Demo: admin@example.com / admin123 or user@example.com / user123</p>
     </AuthLayout>
   );
 }

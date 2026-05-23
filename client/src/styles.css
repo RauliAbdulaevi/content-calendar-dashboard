@@ -788,8 +788,7 @@ textarea:focus-visible {
 }
 
 .auth-heading p,
-.auth-footer,
-.demo-login-note {
+.auth-footer {
   color: #64748b;
   font-size: 13px;
   line-height: 1.55;
@@ -809,10 +808,6 @@ textarea:focus-visible {
 .auth-footer a {
   color: #0f766e;
   font-weight: 850;
-}
-
-.demo-login-note {
-  margin-bottom: 0;
 }
 
 .admin-dashboard {
@@ -1625,4 +1620,201 @@ body {
   .auth-heading h1 {
     font-size: 30px;
   }
+}
+
+/* Softer blue/green finish: reduce pure white surfaces while preserving form clarity. */
+:root {
+  color: #18333f;
+  background: #e7f6f2;
+}
+
+body {
+  background:
+    radial-gradient(circle at 8% 6%, rgba(45, 212, 191, 0.2), transparent 28%),
+    radial-gradient(circle at 94% 2%, rgba(59, 130, 246, 0.2), transparent 32%),
+    linear-gradient(135deg, #dff7f1 0%, #e8f2ff 46%, #d9f4eb 100%);
+}
+
+.app-shell {
+  background:
+    linear-gradient(140deg, rgba(15, 118, 110, 0.18), transparent 32%),
+    linear-gradient(250deg, rgba(37, 99, 235, 0.18), transparent 34%),
+    linear-gradient(180deg, #e2f7f1 0%, #eaf3ff 42%, #dff6ed 100%);
+}
+
+.metric-card,
+.stat-item,
+.idea-row,
+.calendar-section,
+.calendar-cell,
+.admin-table-shell,
+.surface-state {
+  border-color: rgba(125, 211, 252, 0.38);
+  background: rgba(224, 247, 241, 0.72);
+  box-shadow: 0 20px 48px rgba(15, 118, 110, 0.11);
+}
+
+.metric-card:nth-child(2),
+.idea-row:nth-child(2n),
+.stat-item:nth-child(2n) {
+  background: rgba(226, 239, 255, 0.74);
+}
+
+.metric-card:nth-child(3),
+.idea-row:nth-child(3n),
+.stat-item:nth-child(3n) {
+  background: rgba(209, 250, 229, 0.7);
+}
+
+.metric-card:nth-child(4),
+.stat-item:nth-child(4n) {
+  background: rgba(207, 250, 254, 0.72);
+}
+
+.workspace-bar,
+.view-toggle,
+.secondary-button,
+.edit-button,
+.month-controls button,
+.icon-button {
+  border-color: rgba(14, 165, 233, 0.2);
+  background: rgba(218, 242, 250, 0.74);
+}
+
+.header .secondary-button,
+.header .nav-button,
+.hero-preview-card,
+.auth-photo-card,
+.auth-visual-card {
+  background: rgba(222, 247, 241, 0.86);
+}
+
+.view-toggle .active,
+.primary-button {
+  background: linear-gradient(135deg, #0284c7, #0f766e);
+}
+
+.primary-button:hover:not(:disabled) {
+  background: linear-gradient(135deg, #0369a1, #0d9488);
+}
+
+.calendar-section {
+  background:
+    linear-gradient(180deg, rgba(221, 247, 241, 0.88), rgba(218, 236, 255, 0.76)),
+    url("https://images.unsplash.com/photo-1769596722510-b92780d03424?auto=format&fit=crop&fm=jpg&q=45&w=1600");
+  background-position: center;
+  background-size: cover;
+}
+
+.calendar-cell {
+  background: rgba(231, 248, 244, 0.82);
+}
+
+.calendar-cell.muted {
+  background: rgba(212, 233, 241, 0.56);
+}
+
+.calendar-cell.today {
+  border-color: #0f766e;
+  background: linear-gradient(180deg, rgba(204, 251, 241, 0.88), rgba(219, 234, 254, 0.78));
+}
+
+.today .day-number {
+  background: linear-gradient(135deg, #0284c7, #14b8a6);
+  color: #ecfeff;
+}
+
+.event-pill {
+  background: rgba(224, 242, 254, 0.86);
+}
+
+.event-pill.draft,
+.status-badge.draft {
+  background: #e0e7ff;
+  color: #3730a3;
+}
+
+.event-pill.scheduled,
+.status-badge.scheduled {
+  background: #bae6fd;
+  color: #075985;
+}
+
+.event-pill.published,
+.status-badge.published {
+  background: #a7f3d0;
+  color: #065f46;
+}
+
+.admin-table {
+  background: rgba(224, 247, 241, 0.78);
+}
+
+.admin-table th {
+  background: linear-gradient(135deg, rgba(186, 230, 253, 0.85), rgba(204, 251, 241, 0.9));
+  color: #0f766e;
+}
+
+.admin-table td {
+  background: rgba(232, 246, 250, 0.54);
+}
+
+.admin-table tr:hover td {
+  background: rgba(204, 251, 241, 0.7);
+}
+
+.modal {
+  background:
+    linear-gradient(180deg, rgba(225, 247, 242, 0.94), rgba(231, 241, 255, 0.96)),
+    url("https://images.unsplash.com/photo-1766555766657-ea8f81a67934?auto=format&fit=crop&fm=jpg&q=55&w=1200");
+}
+
+.modal input,
+.modal select,
+.modal textarea,
+.auth-form input,
+.admin-table select {
+  background: rgba(248, 252, 255, 0.9);
+}
+
+.file-field {
+  background: rgba(219, 234, 254, 0.62);
+}
+
+.auth-page {
+  background:
+    linear-gradient(120deg, rgba(14, 165, 233, 0.2), transparent 30%),
+    linear-gradient(250deg, rgba(20, 184, 166, 0.22), transparent 32%),
+    linear-gradient(135deg, #dff7f1, #e7f0ff);
+}
+
+.auth-shell {
+  border-color: rgba(125, 211, 252, 0.38);
+  background: rgba(214, 241, 239, 0.62);
+  box-shadow: 0 34px 90px rgba(8, 145, 178, 0.18);
+}
+
+.auth-card {
+  background:
+    linear-gradient(180deg, rgba(225, 247, 242, 0.94), rgba(231, 241, 255, 0.96));
+}
+
+.auth-card .eyebrow {
+  border-color: rgba(14, 165, 233, 0.22);
+  background: rgba(204, 251, 241, 0.72);
+  color: #0f766e;
+}
+
+.auth-footer a {
+  color: #0369a1;
+}
+
+.role-badge.user {
+  background: #bae6fd;
+  color: #075985;
+}
+
+.role-badge.admin {
+  background: #ccfbf1;
+  color: #0f766e;
 }
