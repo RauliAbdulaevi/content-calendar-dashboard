@@ -82,6 +82,29 @@ test("regular users cannot access admin endpoints", async () => {
   assert.equal(body.error.message, "Admin access required.");
 });
 
+test("users can update their own profile name and avatar but not role", async () => {
+  const avatarUrl = "data:image/png;base64,iVBORw0KGgo=";
+  const updated = await request("/api/auth/me", {
+    method: "PATCH",
+    headers: { Authorization: `Bearer ${userToken}` },
+    body: JSON.stringify({ name: "Updated Demo User", avatarUrl, role: "admin" })
+  });
+
+  assert.equal(updated.response.status, 200);
+  assert.equal(updated.body.user.name, "Updated Demo User");
+  assert.equal(updated.body.user.avatarUrl, avatarUrl);
+  assert.equal(updated.body.user.role, "user");
+
+  const me = await request("/api/auth/me", {
+    headers: { Authorization: `Bearer ${userToken}` }
+  });
+
+  assert.equal(me.response.status, 200);
+  assert.equal(me.body.user.name, "Updated Demo User");
+  assert.equal(me.body.user.avatarUrl, avatarUrl);
+  assert.equal(me.body.user.role, "user");
+});
+
 test("users can create, update, and delete their own ideas", async () => {
   const payload = {
     title: "Automated test idea",

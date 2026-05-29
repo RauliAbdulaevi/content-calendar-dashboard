@@ -81,3 +81,10 @@ export function login(payload) {
 export function getCurrentUser() {
   return authRequest("/auth/me");
 }
+
+export function updateCurrentUser(payload) {
+  return authRequest("/auth/me", {
+    method: "PATCH",
+    body: JSON.stringify(payload)
+  });
+}

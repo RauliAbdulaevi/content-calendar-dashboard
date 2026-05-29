@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { CalendarDays, Megaphone, Sparkles, TrendingUp } from "lucide-react";
 
 const visualContent = {
   login: {
@@ -18,17 +19,27 @@ export default function AuthLayout({ title, subtitle, children, footerText, foot
 
   return (
     <main className="auth-page">
+      <span className="auth-glow auth-glow-one" aria-hidden="true" />
+      <span className="auth-glow auth-glow-two" aria-hidden="true" />
       <section className="auth-shell">
         <div className={`auth-visual ${variant}`} aria-hidden="true">
+          <div className="auth-brand-mark">
+            <Sparkles size={16} />
+            Studio Flow
+          </div>
           <div className="auth-photo-card">
             <span className="photo-chip">{visual.chip}</span>
             <strong>{visual.value}</strong>
             <p>{visual.detail}</p>
           </div>
           <div className="auth-visual-card">
-            <span />
-            <span />
-            <span />
+            <span><CalendarDays size={14} /> Content sprint</span>
+            <span><Megaphone size={14} /> Launch copy</span>
+            <span><TrendingUp size={14} /> Growth recap</span>
+          </div>
+          <div className="auth-orbit-card">
+            <span>Next publish</span>
+            <strong>09:30 AM</strong>
           </div>
         </div>
         <div className="auth-card">

@@ -1,5 +1,6 @@
 ﻿import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { LockKeyhole, Mail } from "lucide-react";
 import AuthLayout from "../components/AuthLayout.jsx";
 import { useAuth } from "../context/AuthContext.jsx";
 
@@ -41,11 +42,11 @@ export default function LoginPage() {
     >
       <form className="auth-form" onSubmit={handleSubmit}>
         <label>
-          Email
+          <span className="auth-label-text"><Mail size={14} /> Email</span>
           <input name="email" type="email" value={form.email} onChange={updateField} placeholder="you@example.com" />
         </label>
         <label>
-          Password
+          <span className="auth-label-text"><LockKeyhole size={14} /> Password</span>
           <input name="password" type="password" value={form.password} onChange={updateField} placeholder="Your password" />
         </label>
         {error && <p className="form-error">{error}</p>}

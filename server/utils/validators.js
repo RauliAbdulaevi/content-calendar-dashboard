@@ -50,6 +50,33 @@ export function validateLoginPayload(payload) {
   return { email, password };
 }
 
+export function validateProfilePayload(payload) {
+  const name = normalizeText(payload.name);
+  const avatarUrl = normalizeOptionalText(payload.avatarUrl);
+
+  if (!name) {
+    throw new AppError("Name is required.", 400);
+  }
+
+  if (name.length > 80) {
+    throw new AppError("Name must be 80 characters or fewer.", 400);
+  }
+
+  if (avatarUrl) {
+    const isImageDataUrl = /^data:image\/(png|jpe?g|webp|gif);base64,/i.test(avatarUrl);
+
+    if (!isImageDataUrl) {
+      throw new AppError("Profile picture must be a PNG, JPG, WEBP, or GIF image.", 400);
+    }
+
+    if (avatarUrl.length > 750000) {
+      throw new AppError("Profile picture must be smaller than 750 KB.", 400);
+    }
+  }
+
+  return { name, avatarUrl };
+}
+
 export function validateIdeaPayload(payload) {
   const title = normalizeText(payload.title);
   const scheduledDate = normalizeText(payload.scheduledDate);

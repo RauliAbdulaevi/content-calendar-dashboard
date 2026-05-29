@@ -1,4 +1,4 @@
-﻿import { loginUser, registerUser } from "../services/authService.js";
+import { loginUser, registerUser, updateCurrentUserProfile } from "../services/authService.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 
 export const register = asyncHandler(async (req, res) => {
@@ -13,4 +13,9 @@ export const login = asyncHandler(async (req, res) => {
 
 export function me(req, res) {
   res.json({ user: req.user });
+}
+
+export function updateMe(req, res) {
+  const user = updateCurrentUserProfile(req.user, req.body);
+  res.json({ user });
 }

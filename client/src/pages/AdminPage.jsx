@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Activity, FileText, ShieldCheck, Users } from "lucide-react";
 import { Link } from "react-router-dom";
+import ProfileModal from "../components/ProfileModal.jsx";
 import RoleBadge from "../components/RoleBadge.jsx";
 import { ErrorState, LoadingRows } from "../components/RequestState.jsx";
 import { useAuth } from "../context/AuthContext.jsx";
@@ -10,10 +11,11 @@ import { getStatusClass } from "../utils/content.js";
 import { formatReadableDate, formatTime } from "../utils/date.js";
 
 export default function AdminPage() {
-  const { user, logout } = useAuth();
+  const { user, logout, updateProfile } = useAuth();
   const [users, setUsers] = useState([]);
   const [ideas, setIdeas] = useState([]);
   const [activityLogs, setActivityLogs] = useState([]);
+  const [isProfileOpen, setProfileOpen] = useState(false);
   const [error, setError] = useState("");
   const [isLoading, setLoading] = useState(true);
 
@@ -121,13 +123,19 @@ export default function AdminPage() {
     <main className="app-shell">
       <section className="dashboard admin-dashboard">
         <header className="header">
-          <div>
+          <div className="header-copy">
+            <span className="eyebrow">Workspace operations</span>
             <h1>Admin Panel</h1>
             <p>Manage users, roles, and every content idea in the calendar.</p>
           </div>
           <div className="header-actions">
-            <span className="signed-in-user">{user?.name}</span>
-            <RoleBadge role={user?.role} />
+            <button className="profile-pill" type="button" onClick={() => setProfileOpen(true)} aria-label="Edit profile">
+              <span className="profile-avatar">
+                {user?.avatarUrl ? <img src={user.avatarUrl} alt="" /> : user?.name?.slice(0, 1) || "A"}
+              </span>
+              <span className="signed-in-user">{user?.name}</span>
+              <RoleBadge role={user?.role} />
+            </button>
             <Link className="secondary-button nav-button" to="/dashboard">
               Dashboard
             </Link>
@@ -314,6 +322,10 @@ export default function AdminPage() {
               ))}
           </div>
         </section>
+
+        {isProfileOpen && user && (
+          <ProfileModal user={user} onClose={() => setProfileOpen(false)} onSave={updateProfile} />
+        )}
       </section>
     </main>
   );

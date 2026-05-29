@@ -19,7 +19,7 @@ function getCurrentMonthStart() {
 }
 
 export default function DashboardPage() {
-  const { user, isAdmin, logout } = useAuth();
+  const { user, isAdmin, logout, updateProfile } = useAuth();
   const [ideas, setIdeas] = useState([]);
   const [view, setView] = useState("calendar");
   const [isModalOpen, setModalOpen] = useState(false);
@@ -115,7 +115,7 @@ export default function DashboardPage() {
   return (
     <main className="app-shell">
       <section className="dashboard">
-        <Header onNewContent={() => openContentModal()} user={user} isAdmin={isAdmin} onLogout={logout} />
+        <Header onNewContent={() => openContentModal()} user={user} isAdmin={isAdmin} onLogout={logout} onUpdateProfile={updateProfile} />
         <Metrics metrics={metrics} />
         <PublishedStats stats={publishedStats} />
         <AnalyticsPanel analytics={analytics} />

@@ -1,5 +1,13 @@
 ﻿import { createContext, useContext, useEffect, useMemo, useState } from "react";
-import { clearToken, getCurrentUser, getToken, login as loginRequest, register as registerRequest, setToken } from "../services/authApi.js";
+import {
+  clearToken,
+  getCurrentUser,
+  getToken,
+  login as loginRequest,
+  register as registerRequest,
+  setToken,
+  updateCurrentUser
+} from "../services/authApi.js";
 
 const AuthContext = createContext(null);
 
@@ -37,8 +45,14 @@ export function AuthProvider({ children }) {
     setUser(null);
   }
 
+  async function updateProfile(payload) {
+    const data = await updateCurrentUser(payload);
+    setUser(data.user);
+    return data.user;
+  }
+
   const value = useMemo(
-    () => ({ user, isAuthenticated: Boolean(user), isAdmin: user?.role === "admin", isLoading, login, register, logout }),
+    () => ({ user, isAuthenticated: Boolean(user), isAdmin: user?.role === "admin", isLoading, login, register, logout, updateProfile }),
     [user, isLoading]
   );
 

@@ -76,3 +76,25 @@ export function getUserFromTokenPayload(payload) {
 
   return publicUser(user);
 }
+
+export function updateCurrentUserProfile(currentUser, { name, avatarUrl = "" }) {
+  const cleanName = String(name || "").trim();
+
+  if (!cleanName) {
+    throw new AppError("Name is required.", 400);
+  }
+
+  const data = readData();
+  const user = data.users.find((item) => item.id === currentUser.id);
+
+  if (!user) {
+    throw new AppError("User no longer exists.", 401);
+  }
+
+  user.name = cleanName;
+  user.avatarUrl = String(avatarUrl || "").trim();
+  recordActivity(data, user, "user.profile", `Updated profile for ${user.email}`);
+  writeData(data);
+
+  return publicUser(user);
+}
