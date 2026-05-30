@@ -15,7 +15,7 @@ export function me(req, res) {
   res.json({ user: req.user });
 }
 
-export function updateMe(req, res) {
-  const user = updateCurrentUserProfile(req.user, req.body);
+export const updateMe = asyncHandler(async (req, res) => {
+  const user = await updateCurrentUserProfile(req.user, req.body);
   res.json({ user });
-}
+});

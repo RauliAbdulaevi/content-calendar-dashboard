@@ -1,11 +1,14 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { CalendarCheck2, Plus, Sparkles, TrendingUp } from "lucide-react";
+import { CalendarCheck2, Moon, Plus, Sparkles, Sun, TrendingUp } from "lucide-react";
 import ProfileModal from "./ProfileModal.jsx";
 import RoleBadge from "./RoleBadge.jsx";
+import { useTheme } from "../context/ThemeContext.jsx";
 
 export default function Header({ onNewContent, user, isAdmin, onLogout, onUpdateProfile }) {
   const [isProfileOpen, setProfileOpen] = useState(false);
+  const { theme, toggleTheme } = useTheme();
+  const canCreate = ["admin", "manager", "creator", "user"].includes(user?.role);
 
   return (
     <>
@@ -39,10 +42,15 @@ export default function Header({ onNewContent, user, isAdmin, onLogout, onUpdate
             </button>
           )}
           {isAdmin && <Link className="secondary-button nav-button" to="/admin">Admin Panel</Link>}
-          <button className="primary-button" onClick={onNewContent}>
-            <Plus size={14} />
-            New Content
+          <button className="secondary-button theme-toggle" type="button" onClick={toggleTheme} aria-label="Toggle theme">
+            {theme === "dark" ? <Sun size={14} /> : <Moon size={14} />}
           </button>
+          {canCreate && (
+            <button className="primary-button" onClick={onNewContent}>
+              <Plus size={14} />
+              New Content
+            </button>
+          )}
           <button className="secondary-button" onClick={onLogout}>Logout</button>
         </div>
       </header>

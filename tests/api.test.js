@@ -146,6 +146,82 @@ test("users can create, update, and delete their own ideas", async () => {
   assert.equal(deleted.response.status, 204);
 });
 
+test("workflow roles, comments, and notifications are enforced", async () => {
+  const payload = {
+    title: "Approval workflow idea",
+    platform: "LinkedIn",
+    contentType: "Post",
+    script: "Ask for review.",
+    caption: "Ready for approval.",
+    scheduledDate: "2026-06-05",
+    scheduledTime: "09:00",
+    imageUrl: "",
+    campaign: "Workflow",
+    status: "In Review",
+    stats: { impressions: 0, likes: 0, comments: 0, shares: 0 }
+  };
+
+  const created = await request("/api/ideas", {
+    method: "POST",
+    headers: { Authorization: `Bearer ${userToken}` },
+    body: JSON.stringify(payload)
+  });
+
+  assert.equal(created.response.status, 201);
+  assert.equal(created.body.campaign, "Workflow");
+  assert.equal(created.body.ownerEmail, "user@example.com");
+
+  const blockedApproval = await request(`/api/ideas/${created.body.id}`, {
+    method: "PUT",
+    headers: { Authorization: `Bearer ${userToken}` },
+    body: JSON.stringify({ ...payload, status: "Approved" })
+  });
+
+  assert.equal(blockedApproval.response.status, 403);
+  assert.equal(blockedApproval.body.error.message, "Only admins and managers can approve or publish content.");
+
+  const commentResult = await request(`/api/ideas/${created.body.id}/comments`, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${userToken}` },
+    body: JSON.stringify({ message: "Please review the hook." })
+  });
+
+  assert.equal(commentResult.response.status, 201);
+  assert.equal(commentResult.body.comments.length, 1);
+  assert.equal(commentResult.body.comments[0].message, "Please review the hook.");
+
+  const managerAccount = await request("/api/auth/register", {
+    method: "POST",
+    body: JSON.stringify({ name: "Manager User", email: "manager@example.com", password: "manager123" })
+  });
+  assert.equal(managerAccount.response.status, 201);
+
+  const promoted = await request(`/api/users/${managerAccount.body.user.id}/role`, {
+    method: "PATCH",
+    headers: { Authorization: `Bearer ${adminToken}` },
+    body: JSON.stringify({ role: "manager" })
+  });
+  assert.equal(promoted.response.status, 200);
+  assert.equal(promoted.body.role, "manager");
+
+  const managerToken = await login("manager@example.com", "manager123");
+  const notifications = await request("/api/ideas/notifications", {
+    headers: { Authorization: `Bearer ${managerToken}` }
+  });
+
+  assert.equal(notifications.response.status, 200);
+  assert.ok(notifications.body.some((item) => item.type === "approval"));
+
+  const approved = await request(`/api/ideas/${created.body.id}`, {
+    method: "PUT",
+    headers: { Authorization: `Bearer ${managerToken}` },
+    body: JSON.stringify({ ...payload, status: "Approved" })
+  });
+
+  assert.equal(approved.response.status, 200);
+  assert.equal(approved.body.status, "Approved");
+});
+
 test("users cannot update another user's ideas", async () => {
   const { response, body } = await request("/api/ideas/1", {
     method: "PUT",

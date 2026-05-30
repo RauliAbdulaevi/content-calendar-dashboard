@@ -1,3 +1,4 @@
-﻿export default function RoleBadge({ role }) {
-  return <span className={`role-badge ${role === "admin" ? "admin" : "user"}`}>{role}</span>;
+export default function RoleBadge({ role }) {
+  const cleanRole = role || "user";
+  return <span className={`role-badge ${cleanRole}`}>{cleanRole}</span>;
 }

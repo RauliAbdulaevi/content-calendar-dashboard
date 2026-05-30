@@ -19,6 +19,10 @@ function normalizeStats(stats = {}) {
   };
 }
 
+function normalizeComments(comments = []) {
+  return Array.isArray(comments) ? comments : [];
+}
+
 export function validateRegisterPayload(payload) {
   const name = normalizeText(payload.name);
   const email = normalizeText(payload.email).toLowerCase();
@@ -53,6 +57,8 @@ export function validateLoginPayload(payload) {
 export function validateProfilePayload(payload) {
   const name = normalizeText(payload.name);
   const avatarUrl = normalizeOptionalText(payload.avatarUrl);
+  const currentPassword = String(payload.currentPassword || "");
+  const newPassword = String(payload.newPassword || "");
 
   if (!name) {
     throw new AppError("Name is required.", 400);
@@ -74,7 +80,25 @@ export function validateProfilePayload(payload) {
     }
   }
 
-  return { name, avatarUrl };
+  return { name, avatarUrl, currentPassword, newPassword };
+}
+
+export function validateCommentPayload(payload) {
+  const message = normalizeText(payload.message);
+
+  if (!message) {
+    throw new AppError("Comment message is required.", 400);
+  }
+
+  if (message.length > 500) {
+    throw new AppError("Comment must be 500 characters or fewer.", 400);
+  }
+
+  return { message };
+}
+
+export function validateNotificationPayload(payload) {
+  return { read: Boolean(payload.read) };
 }
 
 export function validateIdeaPayload(payload) {
@@ -100,6 +124,9 @@ export function validateIdeaPayload(payload) {
     scheduledDate,
     scheduledTime,
     imageUrl: normalizeOptionalText(payload.imageUrl),
+    campaign: normalizeOptionalText(payload.campaign),
+    approvalNote: normalizeOptionalText(payload.approvalNote),
+    comments: normalizeComments(payload.comments),
     status,
     stats: normalizeStats(payload.stats)
   };
@@ -109,7 +136,7 @@ export function validateRolePayload(payload) {
   const role = normalizeText(payload.role);
 
   if (!isValidRole(role)) {
-    throw new AppError("Role must be admin or user.", 400);
+    throw new AppError("Role must be admin, manager, creator, viewer, or user.", 400);
   }
 
   return { role };

@@ -3982,3 +3982,396 @@ body {
     width: 100%;
   }
 }
+
+/* Major feature layer. */
+.theme-toggle {
+  width: 42px;
+  padding: 0;
+}
+
+.notification-panel,
+.empty-workspace,
+.ai-panel,
+.preview-panel,
+.comments-panel,
+.settings-panel {
+  border: 1px solid var(--line, rgba(21, 33, 47, 0.14));
+  border-radius: 8px;
+  background: var(--paper, rgba(255, 255, 255, 0.88));
+  box-shadow: var(--shadow-soft, 0 18px 44px rgba(28, 35, 53, 0.08));
+}
+
+.notification-panel {
+  display: grid;
+  gap: 12px;
+  padding: 14px;
+}
+
+.notification-list,
+.performance-list,
+.ai-suggestions,
+.comment-list {
+  display: grid;
+  gap: 9px;
+}
+
+.notification-item,
+.ai-suggestions button {
+  display: grid;
+  gap: 4px;
+  width: 100%;
+  border: 1px solid rgba(49, 87, 213, 0.14);
+  border-radius: 8px;
+  padding: 11px 12px;
+  background: rgba(255, 255, 255, 0.72);
+  color: var(--ink, #15212f);
+  text-align: left;
+}
+
+.notification-item span,
+.performance-list span,
+.empty-inline,
+.form-hint {
+  color: var(--muted, #687385);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.notification-item.read {
+  opacity: 0.58;
+}
+
+.performance-list {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.performance-list article,
+.comment-list article {
+  border: 1px solid rgba(21, 33, 47, 0.1);
+  border-radius: 8px;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.62);
+}
+
+.performance-list strong,
+.comment-list strong {
+  display: block;
+  color: var(--ink, #15212f);
+}
+
+.performance-list p,
+.comment-list p {
+  margin: 4px 0 0;
+  color: var(--muted, #687385);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.filter-bar {
+  grid-template-columns: minmax(220px, 1.3fr) repeat(7, minmax(120px, 1fr)) auto auto;
+}
+
+.filter-bar input {
+  min-height: 40px;
+  border: 1px solid rgba(14, 165, 233, 0.22);
+  border-radius: 8px;
+  padding: 0 11px;
+  background: rgba(255, 255, 255, 0.82);
+  color: var(--ink, #15212f);
+}
+
+.filter-reset,
+.export-button {
+  gap: 7px;
+  white-space: nowrap;
+}
+
+.empty-workspace {
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  min-height: 260px;
+  padding: 34px;
+  text-align: center;
+  background:
+    linear-gradient(105deg, rgba(255, 255, 255, 0.9), rgba(232, 238, 255, 0.76)),
+    url("https://images.unsplash.com/photo-1552581234-26160f608093?auto=format&fit=crop&fm=jpg&q=58&w=1600");
+  background-position: center;
+  background-size: cover;
+}
+
+.empty-workspace strong {
+  color: var(--ink, #15212f);
+  font-size: 22px;
+}
+
+.empty-workspace span {
+  color: var(--muted, #687385);
+}
+
+.empty-workspace div {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+.content-modal {
+  width: min(1040px, 100%);
+}
+
+.modal-two-column {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(300px, 0.85fr);
+  gap: 16px;
+}
+
+.modal-form-stack {
+  display: grid;
+  gap: 14px;
+}
+
+.ai-panel,
+.preview-panel,
+.comments-panel,
+.settings-panel {
+  display: grid;
+  gap: 12px;
+  padding: 13px;
+}
+
+.ai-suggestions {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.ai-suggestions button {
+  align-content: start;
+  min-height: 72px;
+  font-weight: 850;
+}
+
+.ai-suggestions svg {
+  color: var(--coral, #ef6a4d);
+}
+
+.preview-panel {
+  align-content: start;
+  background:
+    linear-gradient(150deg, rgba(238, 242, 255, 0.8), rgba(229, 251, 244, 0.72)),
+    rgba(255, 255, 255, 0.8);
+}
+
+.preview-device {
+  display: grid;
+  gap: 10px;
+  border: 1px solid rgba(21, 33, 47, 0.12);
+  border-radius: 8px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.86);
+}
+
+.preview-topline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.preview-media {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1 / 1;
+  border-radius: 8px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #e8eeff, #ddf5ec);
+  color: var(--muted, #687385);
+}
+
+.preview-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.preview-device h3 {
+  margin: 0;
+  color: var(--ink, #15212f);
+  font-size: 16px;
+}
+
+.preview-device p {
+  margin: 0;
+  color: var(--muted, #687385);
+  line-height: 1.45;
+  white-space: pre-wrap;
+}
+
+.comment-list article span {
+  display: block;
+  margin-top: 2px;
+  color: var(--muted, #687385);
+  font-size: 11px;
+}
+
+.comment-compose {
+  display: grid;
+  gap: 8px;
+}
+
+.comment-compose textarea {
+  min-height: 76px;
+}
+
+.toggle-row {
+  display: flex !important;
+  grid-template-columns: none;
+  align-items: center;
+  gap: 9px !important;
+}
+
+.toggle-row input {
+  width: auto;
+}
+
+.role-badge.manager {
+  background: #ede9fe;
+  color: #5b21b6;
+}
+
+.role-badge.creator {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.role-badge.viewer {
+  background: #e7f5ff;
+  color: #075985;
+}
+
+[data-theme="dark"] {
+  color: #e6edf7;
+  background: #101725;
+  color-scheme: dark;
+  --ink: #eef4ff;
+  --muted: #a7b3c6;
+  --paper: rgba(20, 29, 45, 0.9);
+  --line: rgba(148, 163, 184, 0.22);
+  --shadow-soft: 0 24px 58px rgba(0, 0, 0, 0.28);
+}
+
+[data-theme="dark"] body,
+[data-theme="dark"] .app-shell {
+  background:
+    linear-gradient(135deg, rgba(18, 25, 38, 0.96), rgba(13, 24, 38, 0.98)),
+    #101725;
+}
+
+[data-theme="dark"] .header,
+[data-theme="dark"] .admin-dashboard .header {
+  border-color: rgba(148, 163, 184, 0.22);
+  background:
+    linear-gradient(98deg, rgba(5, 10, 20, 0.94), rgba(20, 35, 64, 0.78) 46%, rgba(10, 95, 87, 0.54)),
+    url("https://images.unsplash.com/photo-1557804506-669a67965ba0?auto=format&fit=crop&fm=jpg&q=78&w=2200");
+  background-position: center;
+  background-size: cover;
+}
+
+[data-theme="dark"] .metric-card,
+[data-theme="dark"] .stat-item,
+[data-theme="dark"] .idea-row,
+[data-theme="dark"] .calendar-section,
+[data-theme="dark"] .calendar-cell,
+[data-theme="dark"] .admin-summary-card,
+[data-theme="dark"] .admin-table-shell,
+[data-theme="dark"] .surface-state,
+[data-theme="dark"] .filter-bar,
+[data-theme="dark"] .analytics-panel,
+[data-theme="dark"] .activity-list,
+[data-theme="dark"] .recovery-list,
+[data-theme="dark"] .notification-panel,
+[data-theme="dark"] .empty-workspace,
+[data-theme="dark"] .ai-panel,
+[data-theme="dark"] .preview-panel,
+[data-theme="dark"] .comments-panel,
+[data-theme="dark"] .settings-panel,
+[data-theme="dark"] .modal,
+[data-theme="dark"] .auth-card,
+[data-theme="dark"] .auth-shell {
+  border-color: var(--line);
+  background: var(--paper);
+  color: var(--ink);
+}
+
+[data-theme="dark"] input,
+[data-theme="dark"] select,
+[data-theme="dark"] textarea,
+[data-theme="dark"] .search-field,
+[data-theme="dark"] .filter-bar input,
+[data-theme="dark"] .filter-bar select,
+[data-theme="dark"] .preview-device,
+[data-theme="dark"] .notification-item,
+[data-theme="dark"] .ai-suggestions button,
+[data-theme="dark"] .performance-list article,
+[data-theme="dark"] .comment-list article,
+[data-theme="dark"] .admin-table,
+[data-theme="dark"] .admin-table th,
+[data-theme="dark"] .admin-table td {
+  border-color: var(--line);
+  background: rgba(15, 23, 42, 0.84);
+  color: var(--ink);
+}
+
+[data-theme="dark"] .metric-card strong,
+[data-theme="dark"] .admin-summary-card strong,
+[data-theme="dark"] .analytics-card strong,
+[data-theme="dark"] .section-heading h2,
+[data-theme="dark"] .calendar-toolbar h2,
+[data-theme="dark"] .idea-row h3,
+[data-theme="dark"] .modal-header h2,
+[data-theme="dark"] .modal label,
+[data-theme="dark"] .profile-role-field,
+[data-theme="dark"] .profile-hero strong,
+[data-theme="dark"] .preview-device h3 {
+  color: var(--ink);
+}
+
+[data-theme="dark"] .header .secondary-button,
+[data-theme="dark"] .header .nav-button,
+[data-theme="dark"] .secondary-button,
+[data-theme="dark"] .edit-button,
+[data-theme="dark"] .month-controls button,
+[data-theme="dark"] .icon-button {
+  border-color: var(--line);
+  background: rgba(30, 41, 59, 0.9);
+  color: var(--ink);
+}
+
+@media (max-width: 1180px) {
+  .filter-bar {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .search-field,
+  .filter-bar > span {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 860px) {
+  .modal-two-column,
+  .ai-suggestions,
+  .performance-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .filter-bar {
+    grid-template-columns: 1fr;
+  }
+
+  .empty-workspace div,
+  .comment-compose {
+    width: 100%;
+  }
+}

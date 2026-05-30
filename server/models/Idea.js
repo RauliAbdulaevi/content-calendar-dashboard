@@ -10,5 +10,9 @@ export function normalizeStats(stats = {}) {
 }
 
 export function canAccessIdea(user, idea) {
-  return user.role === "admin" || idea.userId === user.id;
+  return ["admin", "manager", "viewer"].includes(user.role) || idea.userId === user.id;
+}
+
+export function canEditIdea(user, idea) {
+  return ["admin", "manager"].includes(user.role) || idea.userId === user.id;
 }

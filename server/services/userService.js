@@ -9,7 +9,7 @@ export function listUsers() {
 
 export function updateRole(adminUser, id, role) {
   if (!isValidRole(role)) {
-    throw new AppError("Role must be admin or user.", 400);
+    throw new AppError("Role must be admin, manager, creator, viewer, or user.", 400);
   }
 
   return mutateData((data) => {

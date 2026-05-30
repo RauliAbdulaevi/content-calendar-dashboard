@@ -77,7 +77,7 @@ export function getUserFromTokenPayload(payload) {
   return publicUser(user);
 }
 
-export function updateCurrentUserProfile(currentUser, { name, avatarUrl = "" }) {
+export async function updateCurrentUserProfile(currentUser, { name, avatarUrl = "", currentPassword = "", newPassword = "" }) {
   const cleanName = String(name || "").trim();
 
   if (!cleanName) {
@@ -89,6 +89,18 @@ export function updateCurrentUserProfile(currentUser, { name, avatarUrl = "" }) 
 
   if (!user) {
     throw new AppError("User no longer exists.", 401);
+  }
+
+  if (newPassword) {
+    if (String(newPassword).length < 6) {
+      throw new AppError("Password must be at least 6 characters.", 400);
+    }
+
+    if (!currentPassword || !(await bcrypt.compare(currentPassword, user.passwordHash))) {
+      throw new AppError("Current password is incorrect.", 400);
+    }
+
+    user.passwordHash = await bcrypt.hash(newPassword, 10);
   }
 
   user.name = cleanName;

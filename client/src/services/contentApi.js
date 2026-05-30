@@ -18,6 +18,17 @@ export function updateIdea(id, payload) {
   });
 }
 
+export function addIdeaComment(id, payload) {
+  return authRequest(`/ideas/${id}/comments`, {
+    method: "POST",
+    body: JSON.stringify(payload)
+  });
+}
+
+export function getNotifications() {
+  return authRequest("/ideas/notifications");
+}
+
 export function deleteIdea(id) {
   return authRequest(`/ideas/${id}`, { method: "DELETE" });
 }

@@ -1,12 +1,14 @@
-import { Activity, BarChart3, MousePointer2, TrendingUp } from "lucide-react";
+import { Activity, BarChart3, Layers3, MousePointer2, TrendingUp } from "lucide-react";
 import { formatReadableDate, formatTime } from "../utils/date.js";
 
 export default function AnalyticsPanel({ analytics }) {
   const cards = [
     { label: "Published posts", value: analytics.publishedCount, icon: BarChart3 },
+    { label: "Impressions", value: analytics.impressions.toLocaleString(), icon: MousePointer2 },
     { label: "Total engagement", value: analytics.engagement.toLocaleString(), icon: Activity },
     { label: "Engagement rate", value: `${analytics.engagementRate}%`, icon: TrendingUp },
-    { label: "Top platform", value: analytics.topPlatform, icon: MousePointer2 }
+    { label: "Best platform", value: analytics.topPlatform, icon: MousePointer2 },
+    { label: "Best type", value: analytics.bestContentType, icon: Layers3 }
   ];
 
   return (
@@ -28,6 +30,19 @@ export default function AnalyticsPanel({ analytics }) {
           </article>
         ))}
       </div>
+      {analytics.recentPerformance.length > 0 && (
+        <div className="performance-list" aria-label="Recent performance">
+          {analytics.recentPerformance.map((idea) => (
+            <article key={idea.id}>
+              <span>{idea.platform}</span>
+              <strong>{idea.title}</strong>
+              <p>
+                {Number(idea.stats?.impressions || 0).toLocaleString()} impressions - {Number(idea.stats?.likes || 0).toLocaleString()} likes
+              </p>
+            </article>
+          ))}
+        </div>
+      )}
     </section>
   );
 }

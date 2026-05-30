@@ -3,6 +3,7 @@ import { Activity, FileText, ShieldCheck, Users } from "lucide-react";
 import { Link } from "react-router-dom";
 import ProfileModal from "../components/ProfileModal.jsx";
 import RoleBadge from "../components/RoleBadge.jsx";
+import { teamRoles } from "../constants/content.js";
 import { ErrorState, LoadingRows } from "../components/RequestState.jsx";
 import { useAuth } from "../context/AuthContext.jsx";
 import { deleteIdea, getIdeas } from "../services/contentApi.js";
@@ -195,8 +196,9 @@ export default function AdminPage() {
                           onChange={(event) => handleRoleChange(item.id, event.target.value)}
                           disabled={item.id === user?.id}
                         >
-                          <option value="user">user</option>
-                          <option value="admin">admin</option>
+                          {teamRoles.map((role) => (
+                            <option value={role} key={role}>{role}</option>
+                          ))}
                         </select>
                       </td>
                       <td>{formatReadableDate(item.createdAt.slice(0, 10))}</td>

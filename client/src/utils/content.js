@@ -1,8 +1,8 @@
-﻿export function getContentMetrics(ideas) {
+export function getContentMetrics(ideas) {
   return {
     total: ideas.length,
-    drafts: ideas.filter((idea) => idea.status === "Draft").length,
-    scheduled: ideas.filter((idea) => idea.status === "Scheduled").length,
+    drafts: ideas.filter((idea) => ["Idea", "Draft"].includes(idea.status)).length,
+    scheduled: ideas.filter((idea) => ["In Review", "Approved", "Scheduled"].includes(idea.status)).length,
     published: ideas.filter((idea) => idea.status === "Published").length
   };
 }
@@ -33,18 +33,31 @@ export function groupIdeasByDate(ideas) {
 
 export function filterIdeas(ideas, filters) {
   const search = filters.search.trim().toLowerCase();
+  const campaign = (filters.campaign || "").trim().toLowerCase();
+  const creator = (filters.creator || "").trim().toLowerCase();
+  const from = filters.dateFrom ? new Date(filters.dateFrom) : null;
+  const to = filters.dateTo ? new Date(filters.dateTo) : null;
 
   return ideas.filter((idea) => {
     const matchesSearch =
       !search ||
-      [idea.title, idea.platform, idea.contentType, idea.caption, idea.script]
+      [idea.title, idea.platform, idea.contentType, idea.caption, idea.script, idea.campaign]
         .filter(Boolean)
         .some((value) => String(value).toLowerCase().includes(search));
     const matchesStatus = filters.status === "All" || idea.status === filters.status;
     const matchesPlatform = filters.platform === "All" || idea.platform === filters.platform;
     const matchesType = filters.contentType === "All" || idea.contentType === filters.contentType;
+    const matchesCampaign = !campaign || String(idea.campaign || "").toLowerCase().includes(campaign);
+    const matchesCreator =
+      !creator ||
+      [idea.ownerName, idea.ownerEmail, idea.userId]
+        .filter(Boolean)
+        .some((value) => String(value).toLowerCase().includes(creator));
+    const ideaDate = idea.scheduledDate ? new Date(idea.scheduledDate) : null;
+    const matchesFrom = !from || (ideaDate && ideaDate >= from);
+    const matchesTo = !to || (ideaDate && ideaDate <= to);
 
-    return matchesSearch && matchesStatus && matchesPlatform && matchesType;
+    return matchesSearch && matchesStatus && matchesPlatform && matchesType && matchesCampaign && matchesCreator && matchesFrom && matchesTo;
   });
 }
 
@@ -61,16 +74,24 @@ export function getAnalyticsSummary(ideas) {
     totals[idea.platform] = (totals[idea.platform] || 0) + 1;
     return totals;
   }, {});
+  const typeTotals = ideas.reduce((totals, idea) => {
+    totals[idea.contentType] = (totals[idea.contentType] || 0) + 1;
+    return totals;
+  }, {});
   const topPlatform = Object.entries(platformTotals).sort((a, b) => b[1] - a[1])[0]?.[0] || "No platform yet";
+  const bestContentType = Object.entries(typeTotals).sort((a, b) => b[1] - a[1])[0]?.[0] || "No type yet";
   const nextPost = ideas
     .filter((idea) => idea.status !== "Published")
     .sort((a, b) => `${a.scheduledDate} ${a.scheduledTime}`.localeCompare(`${b.scheduledDate} ${b.scheduledTime}`))[0];
 
   return {
     publishedCount: published.length,
+    impressions: stats.impressions,
     engagement,
     engagementRate,
     topPlatform,
+    bestContentType,
+    recentPerformance: published.slice(-5).reverse(),
     nextPost
   };
 }
@@ -87,6 +108,8 @@ export function buildContentPayload(formData, imageUrl) {
     scheduledDate: String(formData.get("scheduledDate") || ""),
     scheduledTime: String(formData.get("scheduledTime") || ""),
     imageUrl,
+    campaign: String(formData.get("campaign") || "").trim(),
+    approvalNote: String(formData.get("approvalNote") || "").trim(),
     status,
     stats: {
       impressions: status === "Published" ? Number(formData.get("impressions")) || 0 : 0,
@@ -95,4 +118,46 @@ export function buildContentPayload(formData, imageUrl) {
       shares: status === "Published" ? Number(formData.get("shares")) || 0 : 0
     }
   };
+}
+
+export function exportIdeasToCsv(ideas) {
+  const headers = ["Title", "Platform", "Type", "Status", "Scheduled Date", "Scheduled Time", "Campaign", "Caption", "Owner"];
+  const rows = ideas.map((idea) => [
+    idea.title,
+    idea.platform,
+    idea.contentType,
+    idea.status,
+    idea.scheduledDate,
+    idea.scheduledTime,
+    idea.campaign || "",
+    idea.caption || "",
+    idea.ownerEmail || idea.userId || ""
+  ]);
+  const escape = (value) => `"${String(value ?? "").replaceAll('"', '""')}"`;
+  return [headers, ...rows].map((row) => row.map(escape).join(",")).join("\n");
+}
+
+export function generateContentIdeas({ platform = "Instagram", contentType = "Post", campaign = "" }) {
+  const topic = campaign || "your next campaign";
+
+  return [
+    {
+      title: `${topic} launch teaser`,
+      script: `Open with a bold hook about ${topic}, show the transformation, and end with a clear next step.`,
+      caption: `Something new is coming. Here is why ${topic} matters right now.`,
+      hashtags: `#ContentPlanning #${platform.replace(/\s/g, "")} #Campaign`
+    },
+    {
+      title: `${topic} behind the scenes`,
+      script: "Share three quick behind-the-scenes moments and explain the thinking behind the work.",
+      caption: "The best campaigns are built in the details. Here is a look behind the scenes.",
+      hashtags: "#BehindTheScenes #CreatorWorkflow #Marketing"
+    },
+    {
+      title: `${contentType} performance recap`,
+      script: "Show the result, call out one learning, and invite the audience to comment with a question.",
+      caption: "A quick recap, a useful lesson, and what we are trying next.",
+      hashtags: "#SocialMediaTips #Growth #ContentStrategy"
+    }
+  ];
 }
